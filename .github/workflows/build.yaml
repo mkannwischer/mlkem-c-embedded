@@ -12,4 +12,4 @@ jobs:
     - name: install dependencies
       run: sudo apt install astyle
     - name: Astyle
-      run: astyle --dry-run **/*.[ch]
+      run: astyle **/*.[ch] --dry-run | grep -q "Formatted" && exit 1
