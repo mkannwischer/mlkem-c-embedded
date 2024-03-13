@@ -13,3 +13,5 @@ jobs:
       run: sudo apt install astyle
     - name: Astyle
       run: astyle **/*.[ch] --options=.astylerc --dry-run | grep -q "Formatted" && exit 1
+    - name: Astyle Debug
+      run: astyle **/*.[ch] --options=.astylerc --dry-run
