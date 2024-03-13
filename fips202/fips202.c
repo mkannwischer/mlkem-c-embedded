@@ -267,7 +267,7 @@ void shake128_squeezeblocks(uint8_t *output, size_t nblocks, shake128ctx *state)
  *              - size_t inlen:         length of input in bytes
  **************************************************/
 void shake256(uint8_t *output, size_t outlen,
-              const uint8_t *input, size_t inlen){
+              const uint8_t *input, size_t inlen) {
     shake256incctx state;
 
     keccak_inc_init(state.ctx);
