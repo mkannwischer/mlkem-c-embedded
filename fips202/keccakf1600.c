@@ -13,8 +13,7 @@
 #define NROUNDS 24
 #define ROL(a, offset) ((a << offset) ^ (a >> (64-offset)))
 
-static const uint64_t KeccakF_RoundConstants[NROUNDS] =
-{
+static const uint64_t KeccakF_RoundConstants[NROUNDS] = {
     (uint64_t)0x0000000000000001ULL,
     (uint64_t)0x0000000000008082ULL,
     (uint64_t)0x800000000000808aULL,
@@ -41,26 +40,21 @@ static const uint64_t KeccakF_RoundConstants[NROUNDS] =
     (uint64_t)0x8000000080008008ULL
 };
 
-void KeccakF1600_StateExtractBytes(uint64_t *state, unsigned char *data, unsigned int offset, unsigned int length)
-{
+void KeccakF1600_StateExtractBytes(uint64_t *state, unsigned char *data, unsigned int offset, unsigned int length) {
     unsigned int i;
-    for(i=0; i<length; i++)
-    {
-        data[i] = state[(offset + i) >> 3] >> (8*((offset + i) & 0x07));
+    for (i = 0; i < length; i++) {
+        data[i] = state[(offset + i) >> 3] >> (8 * ((offset + i) & 0x07));
     }
 }
 
-void KeccakF1600_StateXORBytes(uint64_t *state, const unsigned char *data, unsigned int offset, unsigned int length)
-{
+void KeccakF1600_StateXORBytes(uint64_t *state, const unsigned char *data, unsigned int offset, unsigned int length) {
     unsigned int i;
-    for(i = 0; i < length; i++)
-    {
+    for (i = 0; i < length; i++) {
         state[(offset + i) >> 3] ^= (uint64_t)data[i] << (8 * ((offset + i) & 0x07));
     }
 }
 
-void KeccakF1600_StatePermute(uint64_t * state)
-{
+void KeccakF1600_StatePermute(uint64_t *state) {
     int round;
 
     uint64_t Aba, Abe, Abi, Abo, Abu;
@@ -103,21 +97,20 @@ void KeccakF1600_StatePermute(uint64_t * state)
     Aso = state[23];
     Asu = state[24];
 
-    for( round = 0; round < NROUNDS; round += 2 )
-    {
+    for ( round = 0; round < NROUNDS; round += 2 ) {
         //    prepareTheta
-        BCa = Aba^Aga^Aka^Ama^Asa;
-        BCe = Abe^Age^Ake^Ame^Ase;
-        BCi = Abi^Agi^Aki^Ami^Asi;
-        BCo = Abo^Ago^Ako^Amo^Aso;
-        BCu = Abu^Agu^Aku^Amu^Asu;
+        BCa = Aba ^ Aga ^ Aka ^ Ama ^ Asa;
+        BCe = Abe ^ Age ^ Ake ^ Ame ^ Ase;
+        BCi = Abi ^ Agi ^ Aki ^ Ami ^ Asi;
+        BCo = Abo ^ Ago ^ Ako ^ Amo ^ Aso;
+        BCu = Abu ^ Agu ^ Aku ^ Amu ^ Asu;
 
         //thetaRhoPiChiIotaPrepareTheta(round  , A, E)
-        Da = BCu^ROL(BCe, 1);
-        De = BCa^ROL(BCi, 1);
-        Di = BCe^ROL(BCo, 1);
-        Do = BCi^ROL(BCu, 1);
-        Du = BCo^ROL(BCa, 1);
+        Da = BCu ^ ROL(BCe, 1);
+        De = BCa ^ ROL(BCi, 1);
+        Di = BCe ^ ROL(BCo, 1);
+        Do = BCi ^ ROL(BCu, 1);
+        Du = BCo ^ ROL(BCa, 1);
 
         Aba ^= Da;
         BCa = Aba;
@@ -129,12 +122,12 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Amo, 21);
         Asu ^= Du;
         BCu = ROL(Asu, 14);
-        Eba =   BCa ^((~BCe)&  BCi );
+        Eba =   BCa ^ ((~BCe)&  BCi );
         Eba ^= (uint64_t)KeccakF_RoundConstants[round];
-        Ebe =   BCe ^((~BCi)&  BCo );
-        Ebi =   BCi ^((~BCo)&  BCu );
-        Ebo =   BCo ^((~BCu)&  BCa );
-        Ebu =   BCu ^((~BCa)&  BCe );
+        Ebe =   BCe ^ ((~BCi)&  BCo );
+        Ebi =   BCi ^ ((~BCo)&  BCu );
+        Ebo =   BCo ^ ((~BCu)&  BCa );
+        Ebu =   BCu ^ ((~BCa)&  BCe );
 
         Abo ^= Do;
         BCa = ROL(Abo, 28);
@@ -146,11 +139,11 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Ame, 45);
         Asi ^= Di;
         BCu = ROL(Asi, 61);
-        Ega =   BCa ^((~BCe)&  BCi );
-        Ege =   BCe ^((~BCi)&  BCo );
-        Egi =   BCi ^((~BCo)&  BCu );
-        Ego =   BCo ^((~BCu)&  BCa );
-        Egu =   BCu ^((~BCa)&  BCe );
+        Ega =   BCa ^ ((~BCe)&  BCi );
+        Ege =   BCe ^ ((~BCi)&  BCo );
+        Egi =   BCi ^ ((~BCo)&  BCu );
+        Ego =   BCo ^ ((~BCu)&  BCa );
+        Egu =   BCu ^ ((~BCa)&  BCe );
 
         Abe ^= De;
         BCa = ROL(Abe,  1);
@@ -162,11 +155,11 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Amu,  8);
         Asa ^= Da;
         BCu = ROL(Asa, 18);
-        Eka =   BCa ^((~BCe)&  BCi );
-        Eke =   BCe ^((~BCi)&  BCo );
-        Eki =   BCi ^((~BCo)&  BCu );
-        Eko =   BCo ^((~BCu)&  BCa );
-        Eku =   BCu ^((~BCa)&  BCe );
+        Eka =   BCa ^ ((~BCe)&  BCi );
+        Eke =   BCe ^ ((~BCi)&  BCo );
+        Eki =   BCi ^ ((~BCo)&  BCu );
+        Eko =   BCo ^ ((~BCu)&  BCa );
+        Eku =   BCu ^ ((~BCa)&  BCe );
 
         Abu ^= Du;
         BCa = ROL(Abu, 27);
@@ -178,11 +171,11 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Ami, 15);
         Aso ^= Do;
         BCu = ROL(Aso, 56);
-        Ema =   BCa ^((~BCe)&  BCi );
-        Eme =   BCe ^((~BCi)&  BCo );
-        Emi =   BCi ^((~BCo)&  BCu );
-        Emo =   BCo ^((~BCu)&  BCa );
-        Emu =   BCu ^((~BCa)&  BCe );
+        Ema =   BCa ^ ((~BCe)&  BCi );
+        Eme =   BCe ^ ((~BCi)&  BCo );
+        Emi =   BCi ^ ((~BCo)&  BCu );
+        Emo =   BCo ^ ((~BCu)&  BCa );
+        Emu =   BCu ^ ((~BCa)&  BCe );
 
         Abi ^= Di;
         BCa = ROL(Abi, 62);
@@ -194,25 +187,25 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Ama, 41);
         Ase ^= De;
         BCu = ROL(Ase,  2);
-        Esa =   BCa ^((~BCe)&  BCi );
-        Ese =   BCe ^((~BCi)&  BCo );
-        Esi =   BCi ^((~BCo)&  BCu );
-        Eso =   BCo ^((~BCu)&  BCa );
-        Esu =   BCu ^((~BCa)&  BCe );
+        Esa =   BCa ^ ((~BCe)&  BCi );
+        Ese =   BCe ^ ((~BCi)&  BCo );
+        Esi =   BCi ^ ((~BCo)&  BCu );
+        Eso =   BCo ^ ((~BCu)&  BCa );
+        Esu =   BCu ^ ((~BCa)&  BCe );
 
         //    prepareTheta
-        BCa = Eba^Ega^Eka^Ema^Esa;
-        BCe = Ebe^Ege^Eke^Eme^Ese;
-        BCi = Ebi^Egi^Eki^Emi^Esi;
-        BCo = Ebo^Ego^Eko^Emo^Eso;
-        BCu = Ebu^Egu^Eku^Emu^Esu;
+        BCa = Eba ^ Ega ^ Eka ^ Ema ^ Esa;
+        BCe = Ebe ^ Ege ^ Eke ^ Eme ^ Ese;
+        BCi = Ebi ^ Egi ^ Eki ^ Emi ^ Esi;
+        BCo = Ebo ^ Ego ^ Eko ^ Emo ^ Eso;
+        BCu = Ebu ^ Egu ^ Eku ^ Emu ^ Esu;
 
         //thetaRhoPiChiIotaPrepareTheta(round+1, E, A)
-        Da = BCu^ROL(BCe, 1);
-        De = BCa^ROL(BCi, 1);
-        Di = BCe^ROL(BCo, 1);
-        Do = BCi^ROL(BCu, 1);
-        Du = BCo^ROL(BCa, 1);
+        Da = BCu ^ ROL(BCe, 1);
+        De = BCa ^ ROL(BCi, 1);
+        Di = BCe ^ ROL(BCo, 1);
+        Do = BCi ^ ROL(BCu, 1);
+        Du = BCo ^ ROL(BCa, 1);
 
         Eba ^= Da;
         BCa = Eba;
@@ -224,12 +217,12 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Emo, 21);
         Esu ^= Du;
         BCu = ROL(Esu, 14);
-        Aba =   BCa ^((~BCe)&  BCi );
-        Aba ^= (uint64_t)KeccakF_RoundConstants[round+1];
-        Abe =   BCe ^((~BCi)&  BCo );
-        Abi =   BCi ^((~BCo)&  BCu );
-        Abo =   BCo ^((~BCu)&  BCa );
-        Abu =   BCu ^((~BCa)&  BCe );
+        Aba =   BCa ^ ((~BCe)&  BCi );
+        Aba ^= (uint64_t)KeccakF_RoundConstants[round + 1];
+        Abe =   BCe ^ ((~BCi)&  BCo );
+        Abi =   BCi ^ ((~BCo)&  BCu );
+        Abo =   BCo ^ ((~BCu)&  BCa );
+        Abu =   BCu ^ ((~BCa)&  BCe );
 
         Ebo ^= Do;
         BCa = ROL(Ebo, 28);
@@ -241,11 +234,11 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Eme, 45);
         Esi ^= Di;
         BCu = ROL(Esi, 61);
-        Aga =   BCa ^((~BCe)&  BCi );
-        Age =   BCe ^((~BCi)&  BCo );
-        Agi =   BCi ^((~BCo)&  BCu );
-        Ago =   BCo ^((~BCu)&  BCa );
-        Agu =   BCu ^((~BCa)&  BCe );
+        Aga =   BCa ^ ((~BCe)&  BCi );
+        Age =   BCe ^ ((~BCi)&  BCo );
+        Agi =   BCi ^ ((~BCo)&  BCu );
+        Ago =   BCo ^ ((~BCu)&  BCa );
+        Agu =   BCu ^ ((~BCa)&  BCe );
 
         Ebe ^= De;
         BCa = ROL(Ebe, 1);
@@ -257,11 +250,11 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Emu, 8);
         Esa ^= Da;
         BCu = ROL(Esa, 18);
-        Aka =   BCa ^((~BCe)&  BCi );
-        Ake =   BCe ^((~BCi)&  BCo );
-        Aki =   BCi ^((~BCo)&  BCu );
-        Ako =   BCo ^((~BCu)&  BCa );
-        Aku =   BCu ^((~BCa)&  BCe );
+        Aka =   BCa ^ ((~BCe)&  BCi );
+        Ake =   BCe ^ ((~BCi)&  BCo );
+        Aki =   BCi ^ ((~BCo)&  BCu );
+        Ako =   BCo ^ ((~BCu)&  BCa );
+        Aku =   BCu ^ ((~BCa)&  BCe );
 
         Ebu ^= Du;
         BCa = ROL(Ebu, 27);
@@ -273,11 +266,11 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Emi, 15);
         Eso ^= Do;
         BCu = ROL(Eso, 56);
-        Ama =   BCa ^((~BCe)&  BCi );
-        Ame =   BCe ^((~BCi)&  BCo );
-        Ami =   BCi ^((~BCo)&  BCu );
-        Amo =   BCo ^((~BCu)&  BCa );
-        Amu =   BCu ^((~BCa)&  BCe );
+        Ama =   BCa ^ ((~BCe)&  BCi );
+        Ame =   BCe ^ ((~BCi)&  BCo );
+        Ami =   BCi ^ ((~BCo)&  BCu );
+        Amo =   BCo ^ ((~BCu)&  BCa );
+        Amu =   BCu ^ ((~BCa)&  BCe );
 
         Ebi ^= Di;
         BCa = ROL(Ebi, 62);
@@ -289,11 +282,11 @@ void KeccakF1600_StatePermute(uint64_t * state)
         BCo = ROL(Ema, 41);
         Ese ^= De;
         BCu = ROL(Ese, 2);
-        Asa =   BCa ^((~BCe)&  BCi );
-        Ase =   BCe ^((~BCi)&  BCo );
-        Asi =   BCi ^((~BCo)&  BCu );
-        Aso =   BCo ^((~BCu)&  BCa );
-        Asu =   BCu ^((~BCa)&  BCe );
+        Asa =   BCa ^ ((~BCe)&  BCi );
+        Ase =   BCe ^ ((~BCi)&  BCo );
+        Asi =   BCi ^ ((~BCo)&  BCu );
+        Aso =   BCo ^ ((~BCu)&  BCa );
+        Asu =   BCu ^ ((~BCa)&  BCe );
     }
 
     //copyToState(state, A)

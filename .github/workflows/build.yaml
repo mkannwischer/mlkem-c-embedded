@@ -11,5 +11,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: install dependencies
       run: sudo apt install astyle
+    - name: Astyle Debug
+      run: astyle **/*.[ch] --options=.astylerc --dry-run
     - name: Astyle
-      run: astyle --dry-run **/*.[ch]
+      run: astyle **/*.[ch] --options=.astylerc --dry-run | grep -vq "Formatted"
