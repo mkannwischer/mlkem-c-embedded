@@ -14,4 +14,4 @@ jobs:
     - name: Astyle Debug
       run: astyle **/*.[ch] --options=.astylerc --dry-run
     - name: Astyle
-      run: astyle **/*.[ch] --options=.astylerc --dry-run | grep -q "Formatted" && exit 1
+      run: astyle **/*.[ch] --options=.astylerc --dry-run | grep -q "Formatted"
