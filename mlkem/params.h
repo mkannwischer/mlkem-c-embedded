@@ -5,7 +5,6 @@
 #define KYBER_K 3	/* Change this for different security strengths */
 #endif
 
-
 /* Don't change parameters below this line */
 #if   (KYBER_K == 2)
 #define KYBER_NAMESPACE(s) pqcrystals_kyber512_ref_##s
