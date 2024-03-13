@@ -66,7 +66,7 @@ const int16_t zetas[128] = {
 * Returns 16-bit integer congruent to a*b*R^{-1} mod q
 **************************************************/
 static int16_t fqmul(int16_t a, int16_t b) {
-    return montgomery_reduce((int32_t)a*b);
+    return montgomery_reduce((int32_t)a * b);
 }
 
 /*************************************************
@@ -82,10 +82,10 @@ void ntt(int16_t r[256]) {
     int16_t t, zeta;
 
     k = 1;
-    for(len = 128; len >= 2; len >>= 1) {
-        for(start = 0; start < 256; start = j + len) {
+    for (len = 128; len >= 2; len >>= 1) {
+        for (start = 0; start < 256; start = j + len) {
             zeta = zetas[k++];
-            for(j = start; j < start + len; j++) {
+            for (j = start; j < start + len; j++) {
                 t = fqmul(zeta, r[j + len]);
                 r[j + len] = r[j] - t;
                 r[j] = r[j] + t;
@@ -109,10 +109,10 @@ void invntt(int16_t r[256]) {
     const int16_t f = 1441; // mont^2/128
 
     k = 127;
-    for(len = 2; len <= 128; len <<= 1) {
-        for(start = 0; start < 256; start = j + len) {
+    for (len = 2; len <= 128; len <<= 1) {
+        for (start = 0; start < 256; start = j + len) {
             zeta = zetas[k--];
-            for(j = start; j < start + len; j++) {
+            for (j = start; j < start + len; j++) {
                 t = r[j];
                 r[j] = barrett_reduce(t + r[j + len]);
                 r[j + len] = r[j + len] - t;
@@ -121,8 +121,9 @@ void invntt(int16_t r[256]) {
         }
     }
 
-    for(j = 0; j < 256; j++)
+    for (j = 0; j < 256; j++) {
         r[j] = fqmul(r[j], f);
+    }
 }
 
 /*************************************************
@@ -136,8 +137,7 @@ void invntt(int16_t r[256]) {
 *              - const int16_t b[2]: pointer to the second factor
 *              - int16_t zeta: integer defining the reduction polynomial
 **************************************************/
-void basemul(int16_t r[2], const int16_t a[2], const int16_t b[2], int16_t zeta)
-{
+void basemul(int16_t r[2], const int16_t a[2], const int16_t b[2], int16_t zeta) {
     r[0]  = fqmul(a[1], b[1]);
     r[0]  = fqmul(r[0], zeta);
     r[0] += fqmul(a[0], b[0]);

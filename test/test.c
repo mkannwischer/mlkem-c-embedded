@@ -5,8 +5,7 @@
 
 #define NTESTS 1000
 
-static int test_keys(void)
-{
+static int test_keys(void) {
     uint8_t pk[CRYPTO_PUBLICKEYBYTES];
     uint8_t sk[CRYPTO_SECRETKEYBYTES];
     uint8_t ct[CRYPTO_CIPHERTEXTBYTES];
@@ -22,7 +21,7 @@ static int test_keys(void)
     //Alice uses Bobs response to get her shared key
     crypto_kem_dec(key_a, ct, sk);
 
-    if(memcmp(key_a, key_b, CRYPTO_BYTES)) {
+    if (memcmp(key_a, key_b, CRYPTO_BYTES)) {
         printf("ERROR keys\n");
         return 1;
     }
@@ -30,8 +29,7 @@ static int test_keys(void)
     return 0;
 }
 
-int main(void)
-{
+int main(void) {
     unsigned int i;
     int r = 0;
 
@@ -39,11 +37,11 @@ int main(void)
     printf("|sk|=%d\n", CRYPTO_SECRETKEYBYTES);
     printf("|ct|=%d\n", CRYPTO_CIPHERTEXTBYTES);
 
-    for(i=0; i<NTESTS; i++) {
+    for (i = 0; i < NTESTS; i++) {
         r  |= test_keys();
     }
 
-    if(r) {
+    if (r) {
         printf("ERRORS\n");
     } else {
         printf("OK\n");
